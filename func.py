@@ -7,7 +7,9 @@ Created on Sat Oct  6 19:45:47 2018
 """
 
 import networkx as nx
-
+import os
+import rpy2.robjects as robjects
+import numpy as np
 
 def ldata(archive):
     f = open(archive)
@@ -81,3 +83,17 @@ def community(nxG, algorithm, fig_name = "G"):
     labels = igG(gml_file_name, algorithm, fig_name)
     os.remove(gml_file_name)
     return np.array(labels)
+
+
+def grupo(graph,attribute='gender', kind='f'):
+    
+    '''
+    Devuelve una lista de los nodos con un cierto atributo 
+    '''
+    
+    nodes = list(dict(graph.nodes))
+    group = []
+    for n in nodes:
+        if graph.nodes[n][attribute] == kind:
+            group.append(n)
+    return group
