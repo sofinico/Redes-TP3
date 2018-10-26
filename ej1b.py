@@ -51,26 +51,27 @@ from networkx.algorithms.community import modularity
 times = 1000
 
 
-for l in labels:    
-    for n,c in zip(dolphins.nodes,comunidades[l]):
-        dolphins.nodes[n]["comunidad"] = int(c)
-        
-    partitions = [set(grupo(dolphins,attribute='comunidad',kind=i)) for i in
-                  range(1,int(max(comunidades[l]))+1)]
-    modularities[l] = modularity(dolphins, partitions)
-
-    random_mode = []
-    for t in range(times):
-        newG = dolphins.copy()
-        newG = nx.double_edge_swap(dolphins, nswap=int(dolphins.number_of_nodes()/2), max_tries=500)
-        com = community(newG,label)
-        for n,c in zip(newG.nodes,com):
-            newG.nodes[n]["comunidad"] = int(c)
-        partitions = [set(grupo(newG,attribute='comunidad',kind=i)) for i in
-                      range(1,int(max(com))+1)]
-        random_mode.append(modularity(newG, partitions))
+l = 'louvain'
+   
+for n,c in zip(dolphins.nodes,comunidades[l]):
+    dolphins.nodes[n]["comunidad"] = int(c)
     
-    randMod[l] = random_mode
+partitions = [set(grupo(dolphins,attribute='comunidad',kind=i)) for i in
+              range(1,int(max(comunidades[l]))+1)]
+modularities[l] = modularity(dolphins, partitions)
+
+random_mode = []
+for t in range(times):
+    newG = dolphins.copy()
+    newG = nx.double_edge_swap(dolphins, nswap=int(dolphins.number_of_nodes()/2), max_tries=500)
+    com = community(newG,label)
+    for n,c in zip(newG.nodes,com):
+        newG.nodes[n]["comunidad"] = int(c)
+    partitions = [set(grupo(newG,attribute='comunidad',kind=i)) for i in
+                  range(1,int(max(com))+1)]
+    random_mode.append(modularity(newG, partitions))
+
+randMod[l] = random_mode
     
 #%% 
 
