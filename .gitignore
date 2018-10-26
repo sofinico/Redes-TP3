@@ -1,1 +1,6 @@
 .DS_Store
+G__edge_betweenness.svg
+G__fast_greedy.svg
+G__infomap.svg
+G__louvain.svg
+__pycache__/
