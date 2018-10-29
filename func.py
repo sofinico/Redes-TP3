@@ -97,3 +97,88 @@ def grupo(graph,attribute='gender', kind='f'):
         if graph.nodes[n][attribute] == kind:
             group.append(n)
     return group
+
+
+def partitions(graph, comunidades):
+    part = [ [] for i in range(int(max(comunidades))+1) ]
+    for a in list(zip(graph.nodes,comunidades)):
+        i = int(a[1])
+        part[i].append(a[0])
+    return part[1:]
+        
+
+
+def silhouette(graph, partitions, node):
+    '''
+    Medida de silhouette para un nodo
+    
+    Graph: networkx.graph
+    Partitions: iterable
+    Node: Name of node.
+    '''
+
+    bs = []
+    for p in partitions:
+        if node in p:
+            amigues = p
+        
+            acum = 0
+            for a in amigues:
+                acum += nx.shortest_path_length(graph, source=node, target=a, weight=None)   
+            ai = acum/len(amigues)
+            
+        if node not in p:
+            if len(list(nx.connected_component_subgraphs(graph))) == 1: 
+                enemigues = p
+                
+                bcum= 0 
+                for b in enemigues:
+                    bcum += nx.shortest_path_length(graph, source=node, target=b, weight=None)   
+                bis = bcum/len(enemigues)
+                bs.append(bis)
+            else:
+                for g in nx.connected_component_subgraphs(graph): 
+                    if node in list(g.nodes):
+                        enemigues = p
+                        bcum = 0 
+                        for b in enemigues:
+                            if b in list(g.nodes):
+                                bcum += nx.shortest_path_length(g, source=node, target=b, weight=None) 
+                        bis = bcum/len(enemigues)
+                        bs.append(bis)
+    bi = min(bs)
+    M = max([ai,bi])
+    sil = (bi-ai)/M
+    return sil
+
+
+def silhouette_graph(graph, particiones):
+    siluetas = [[] for i in range(len(particiones))]
+    i=0
+    for p in particiones:
+        siluetas[i] = [ silhouette(graph,particiones, n) for n in p ] 
+        i+=1
+    return siluetas
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
