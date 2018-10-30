@@ -1,5 +1,7 @@
 # Redes-TP3
 
+## ANDÁ A HACER UNA PASTAFROLA WACHA
+(Yo no fui)
 
 ## Item A
 Está piola. Cuidado cuando graficas. Tiende a flashear si graficas todo junto
