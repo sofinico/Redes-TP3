@@ -11,6 +11,7 @@ import os
 import rpy2.robjects as robjects
 import numpy as np
 
+
 def ldata(archive):
     f = open(archive)
     data = []
@@ -162,39 +163,70 @@ def silhouette_graph(graph, particiones):
     
     
 
-def mutual(graph, part1, part2):
+#def mutual(graph, part1, part2):
+#    '''
+#    Graph: Networkx graph
+#    part1, part2, lista de particiones para comparar
+#    '''
+#    
+#    pC1 = [ part1.count(i)/graph.number_of_nodes()  for i in
+#              range(1,int(max(part1))+1)]
+#    pC2 = [ part2.count(i)/graph.number_of_nodes()  for i in
+#              range(1,int(max(part2))+1)]
+#        
+#    pC12 = np.zeros([len(pC1),len(pC2)])
+#    sumN12 = 0
+#    for a in list(zip(graph.nodes,part1)):
+#        for b in list(zip(graph.nodes,part2)):
+#            if a[1] == b[1]:
+#                pC12[int(a[1])-1][int(b[1])-1] += 1
+#                sumN12 += 1
+#    pC12 = [i/sumN12 for i in pC12]
+#    
+#    hC1= -np.sum([i*np.log(i) for i in pC1]); hC2= -np.sum([i*np.log(i) for i in pC2])
+#    
+#    I = 0
+#    
+#    for i in range(len(pC1)-1):
+#        for j in range(len(pC12)-1):
+#            I += pC12[i][j] * np.log(pC12[i][j]/(pC1[i]*pC2[j]))
+#            
+#    In = 2*I/(hC1+hC2)
+#    return In
+#    
+def infomutual(graph, part1, part2):
     '''
-    Graph: Networkx graph
-    part1, part2, lista de particiones para comparar
+    Graph:Networkx graph
+    Part1,Part2: lista de particiones ['strings'] para comparar
     '''
+    N = graph.number_of_nodes()
+    idx = [ (part1[i],part2[i]) for i in range(N)]
     
     pC1 = [ part1.count(i)/graph.number_of_nodes()  for i in
               range(1,int(max(part1))+1)]
     pC2 = [ part2.count(i)/graph.number_of_nodes()  for i in
               range(1,int(max(part2))+1)]
-        
-    pC12 = np.zeros([len(pC1),len(pC2)])
-    sumN12 = 0
-    for a in list(zip(graph.nodes,part1)):
-        for b in list(zip(graph.nodes,part2)):
-            if a[1] == b[1]:
-                pC12[int(a[1])-1][int(b[1])-1] += 1
-                sumN12 += 1
-    pC12 = [i/sumN12 for i in pC12]
+  
+    pC12 = np.zeros([len(pC1),len(pC2)]) 
+    for i in idx:
+        pC12[int(i[0])-1][int(i[1])-1] += 1
     
-    hC1= -np.sum([i*np.log(i) for i in pC1]); hC2= -np.sum([i*np.log(i) for i in pC2])
+    pC12 = [i/N for i in pC12 ]
+
+    hC1= -np.sum([i*np.log(i) for i in pC1])
+    hC2= -np.sum([i*np.log(i) for i in pC2])
     
     I = 0
     
-    for i in range(len(pC1)-1):
-        for j in range(len(pC12)-1):
-            I += pC12[i][j] * np.log(pC12[i][j]/(pC1[i]*pC2[j]))
-            
+    for j in range(len(pC1)):
+        for k in range(len(pC2)):
+            if pC12[j][k] != 0:
+                I += pC12[j][k] * np.log(pC12[j][k]/(pC1[j]*pC2[k]))
+    
     In = 2*I/(hC1+hC2)
+    In
     return In
-    
-    
-
+                                        
 
 
 
