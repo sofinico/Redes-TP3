@@ -162,38 +162,6 @@ def silhouette_graph(graph, particiones):
     return siluetas
     
     
-
-#def mutual(graph, part1, part2):
-#    '''
-#    Graph: Networkx graph
-#    part1, part2, lista de particiones para comparar
-#    '''
-#    
-#    pC1 = [ part1.count(i)/graph.number_of_nodes()  for i in
-#              range(1,int(max(part1))+1)]
-#    pC2 = [ part2.count(i)/graph.number_of_nodes()  for i in
-#              range(1,int(max(part2))+1)]
-#        
-#    pC12 = np.zeros([len(pC1),len(pC2)])
-#    sumN12 = 0
-#    for a in list(zip(graph.nodes,part1)):
-#        for b in list(zip(graph.nodes,part2)):
-#            if a[1] == b[1]:
-#                pC12[int(a[1])-1][int(b[1])-1] += 1
-#                sumN12 += 1
-#    pC12 = [i/sumN12 for i in pC12]
-#    
-#    hC1= -np.sum([i*np.log(i) for i in pC1]); hC2= -np.sum([i*np.log(i) for i in pC2])
-#    
-#    I = 0
-#    
-#    for i in range(len(pC1)-1):
-#        for j in range(len(pC12)-1):
-#            I += pC12[i][j] * np.log(pC12[i][j]/(pC1[i]*pC2[j]))
-#            
-#    In = 2*I/(hC1+hC2)
-#    return In
-#    
 def infomutual(graph, part1, part2):
     '''
     Graph:Networkx graph
@@ -228,7 +196,37 @@ def infomutual(graph, part1, part2):
     return In
                                         
 
-
+def precision(graph,part1,part2):
+    '''
+    Graph:Networkx graph
+    Part1,Part2: lista de particiones ['strings'] para comparar
+    
+    Matriz de precisión:
+                    C(i,j)=C(i,j) C(i,j)!=C(i,j)
+    C(i,j)=C(i,j)         a             b
+    C(i,j)!=C(i,j)        c             d  
+    
+    Returns: Float
+    
+    '''
+    
+    N = graph.number_of_nodes()
+    idx = [ (part1[i],part2[i]) for i in range(N)]
+    
+    a = 0
+    d = 0
+    
+    for i in idx:
+        for j in idx:
+            if idx.count(i) != idx.count(j):
+                if i[0] == j[0] and i[1] == j[1]:
+                    a += 1
+                elif i[0] != j[0] and i[1] != j[1]:
+                    d += 1
+    a = a/2
+    d = d/2            
+    pres = 2*(a+d)/(N*(N-1))/2
+    return pres
 
 
 

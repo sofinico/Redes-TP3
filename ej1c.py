@@ -34,19 +34,29 @@ for label in labels:
 #%%
 labels = ['louvain','fast_greedy','edge_betweenness','infomap']
 #labels = ['infomap','fast_greedy']
-acuerdo = np.zeros([len(labels),len(labels)])
+info = np.zeros([len(labels),len(labels)])
 
 for l in labels:
     for m in labels:
-        acuerdo[labels.index(l)][labels.index(m)]=infomutual(dolphins,list(comunidades[l]),list(comunidades[m]))
+        info[labels.index(l)][labels.index(m)]=infomutual(dolphins,list(comunidades[l]),list(comunidades[m]))
         
-caract = pd.DataFrame(acuerdo)
+caract = pd.DataFrame(info)
 print(caract)
 #print(caract.to_latex()) 
 
 #%%
 
+labels = ['louvain','fast_greedy','edge_betweenness','infomap']
+#labels = ['infomap','fast_greedy']
+preci = np.zeros([len(labels),len(labels)])
 
+for l in labels:
+    for m in labels:
+        preci[labels.index(l)][labels.index(m)]=precision(dolphins,list(comunidades[l]),list(comunidades[m]))
+        
+caract = pd.DataFrame(preci)
+print(caract)
+#print(caract.to_latex()) 
             
 
         
