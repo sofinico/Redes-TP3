@@ -27,17 +27,10 @@ for label in labels:
 
 #%%
 
-'''
-ITEM B
-
-Falta escribir el script para silhouettes
-'''   
-
 modularities = dict()
 siluetas = dict() 
 randMod = dict()
 randSil = dict()
-
 
 #%%
 
