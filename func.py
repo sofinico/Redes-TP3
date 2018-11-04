@@ -230,15 +230,94 @@ def precision(graph,part1,part2):
 
 
 
+################################ EJERCICIO D ##################################
+
+"""
+El cálculo de attribute_list puede ir adentro de bend, pero para optimizar
+a la hora de hacer las iteraciones es mejor calcularla afuera y que vaya 
+como parámetro.
+
+attribute_list = []
+for n in graph.nodes:
+    attribute_list.append(graph.nodes[n][attribute]) 
+"""    
+
+def bend(graph, attribute_list, attribute = 'gender'):
+    
+    """
+    Reasigna un atributo aleatoriamente manteniendo la proporción
+    original del mismo.
+    
+    Out: 
+        otro grafo idéntico pero con el atributo reasignado
+    """
+    
+    np.random.shuffle(attribute_list)
+    new = graph.copy()
+    for n,g in zip(graph.nodes,attribute_list):
+        new.nodes[n][attribute] = g               
+    
+    return new
 
 
-
-
-
-
-
-
-
-
-
-
+def gendercount(graph, communities, method, it = 100):
+    
+    """
+    Param: 
+        graph: nx.Graph() al cual se le calcularon las comunidades
+        communities: diccionario - key el método, values el array 
+        comunidades de networkx
+        method: string - el método de particiones que estamos utilizando 
+        para los cálculos
+        it: cantidad de iteraciones random
+    
+    Out:
+        d: diccionario - keys las comunidades c
+            d[c]['total']: la cantidad de individuos de la comunidad
+            d[c]['f', 'm' o 'NA'][0] = cantidad real de ese género
+            d[c]['f', 'm' o 'NA'][1:] = cantidades random      
+    """ 
+    
+    def quantity(graph, total = False):
+    
+        quant = dict()
+        if total:
+            quant['total'] = 0
+        for g in genders:
+                quant[g] = 0
+        for i in range(len(communities[method])):
+                if communities[method][i] == c:
+                    quant[graph.node[nodes[i]]['gender']] += 1
+                    if total:
+                        quant['total'] += 1
+                
+        return quant
+    
+    d = dict() 
+    genders = ['f', 'm', 'NA']
+    nodes = list(dolphins.nodes())
+    
+    for c in set(communities[method]):
+        
+        d[c] = dict()
+        d[c]['total'] = 0         
+        cant = quantity(graph, total = True)
+        for g in genders:
+            d[c][g] = []
+            d[c][g].append(cant[g])
+        d[c]['total'] = cant['total']
+        
+        attribute_list = []
+        for n in graph.nodes:
+            attribute_list.append(graph.nodes[n]['gender']) 
+        
+        new = graph
+        for i in range(it):
+            new = bend(new, attribute_list)
+            cant = quantity(new)
+            for g in genders:
+                d[c][g].append(cant[g])
+        
+    return d
+        
+            
