@@ -319,5 +319,28 @@ def gendercount(graph, communities, method, it = 100):
                 d[c][g].append(cant[g])
         
     return d
-        
+
+
+def pval(freq,bines,Tobs):
+    
+    """
+    Calcula el pval para un cierto estadístico observado
+    """
+    
+    bineslef = bines[:-1]
+    cumprob = [sum(freq[0:i+1]) for i in range(len(freq))]
+    i = 1
+    if bineslef[0] >= Tobs:
+        return 1
+    elif bineslef[-1] < Tobs:
+        return 1 - cumprob[-1]
+    else:
+        while bineslef[i] < Tobs:
+            if i < len(bineslef)-1:
+                i+=1
+            else:
+                break
+            
+        return 1 - cumprob[i-1] 
+            
             
