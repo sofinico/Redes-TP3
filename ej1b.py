@@ -71,6 +71,8 @@ randSil[l] = random_sil
 
 aveSil = np.average(list(itertools.chain(*siluetas[l])))
 print(datetime.datetime.now()-t0)
+
+
 #%% 
 
 
@@ -78,6 +80,7 @@ print(datetime.datetime.now()-t0)
 Ploteo
 
 '''
+
 #labels = ['louvain','fast_greedy','edge_betweenness','infomap']
     
 l = 'louvain'
