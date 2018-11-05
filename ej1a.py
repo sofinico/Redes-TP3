@@ -9,11 +9,11 @@ import numpy as np
 
 dolphins = nx.read_gml('TC03_data/dolphins.gml')
 gender = ldata('TC03_data/dolphinsGender.txt')
-gender = [gender[n][1] for n in range(len(gender))]
 
-for n,g in zip(dolphins.nodes,gender):
-    dolphins.nodes[n]["gender"] = g
-
+for n in dolphins.nodes:
+    for g in gender:
+        if g[0] == n:
+            dolphins.nodes[n]['gender'] = g[1]
 #%%
     
 comunidades = dict()
