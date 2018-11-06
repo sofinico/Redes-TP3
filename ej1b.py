@@ -92,6 +92,7 @@ plt.hist(randMod[l], color='dodgerblue', normed=True, histtype='step')
 plt.axvline(modularities[l],marker='d',color='c',markersize=7,label='$Modularidad$')
 plt.show(1)
 
+#%%
 plt.figure(2)
 plt.plot(randSil[l], marker='.', color='salmon')
 plt.axhline(aveSil, color='pink', label=r'$Silhouette$')

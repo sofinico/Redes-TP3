@@ -25,8 +25,15 @@ for label in labels:
     com = community(dolphins,label)
     comunidades[label]=com
 
+#%% Caracterizo cada partición
+
+labels = ['louvain','fast_greedy','edge_betweenness','infomap']
+
+for l in labels: 
+    print('Partición %s - Número de comunidades %s - Clustering Medio %s'
+          % (l,max(comunidades[l]),round(clust(dolphins,comunidades[l]),2)))
+  
 #%%
-    
 '''
 Ploteo
 
@@ -39,7 +46,7 @@ Corré cada label a manopla, si no, se traba.
 colors = ['darkred','salmon','olivedrab','lightgreen','deepskyblue',
           'darkblue','blueviolet'] 
 #labels = ['louvain','fast_greedy','edge_betweenness','infomap']
-l = 'louvain'
+l = 'infomap'
 
 for n,c in zip(dolphins.nodes,comunidades[l]):
     dolphins.nodes[n]["comunidad"] = colors[int(c)]

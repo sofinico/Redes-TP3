@@ -206,7 +206,7 @@ def precision(graph,part1,part2):
     C(i,j)=C(i,j)         a             b
     C(i,j)!=C(i,j)        c             d  
     
-    Returns: Float
+    Returns: Float33
     
     '''
     
@@ -216,17 +216,43 @@ def precision(graph,part1,part2):
     a = 0
     d = 0
     
-    for i in idx:
-        for j in idx:
-            if idx.count(i) != idx.count(j):
-                if i[0] == j[0] and i[1] == j[1]:
+    for i in range(N):
+        for j in range(N):
+            if i != j:
+                if idx[i][0] == idx[j][0] and idx[i][1] == idx[j][1]:
                     a += 1
-                elif i[0] != j[0] and i[1] != j[1]:
+                elif idx[i][0] != idx[j][0] and idx[i][1] != idx[j][1]:
                     d += 1
+   
     a = a/2
     d = d/2            
-    pres = 2*(a+d)/(N*(N-1))/2
+    pres = 2*(a+d)/(N*(N-1))
     return pres
+
+
+def clust(graph,part):
+    subGs = []
+    for p in range(1,1+int(max(part))):
+        subnodes=[]
+        for n,idx in zip(graph.nodes,part):
+            if idx == p:
+                subnodes.append(n)
+        subG = graph.subgraph(subnodes)
+        subGs.append(subG)
+    clustl = []
+    number = sorted([g.number_of_nodes() for g in subGs])
+    for g in subGs:       
+        gn = g.number_of_nodes()
+        if gn == number[-1]:
+            clustl.append(nx.average_clustering(g))
+        elif gn == number[:len(number)-2]:
+            clustl.append(nx.average_clustering(g))
+        elif gn == number[:len(number)-3]:
+            clustl.append(nx.average_clustering(g))
+    aveclust = np.average(clustl)
+    return aveclust
+
+    
 
 
 

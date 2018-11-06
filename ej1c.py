@@ -43,8 +43,8 @@ for l in labels:
         info[labels.index(l)][labels.index(m)]=infomutual(dolphins,list(comunidades[l]),list(comunidades[m]))
         
 caract = pd.DataFrame(info)
-print(caract)
-#print(caract.to_latex()) 
+#print(caract)
+print(caract.to_latex()) 
 
 #%%
 
@@ -57,8 +57,8 @@ for l in labels:
         preci[labels.index(l)][labels.index(m)]=precision(dolphins,list(comunidades[l]),list(comunidades[m]))
         
 caract = pd.DataFrame(preci)
-print(caract)
-#print(caract.to_latex()) 
+#print(caract)
+print(caract.to_latex()) 
             
 
         
