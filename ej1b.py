@@ -40,6 +40,7 @@ l = 'edge_betweenness'
    
 parts = partit(dolphins,comunidades[l])
 measured_mod = modularity(dolphins, parts)
+measured_sil = np.average(silhouette_graph(dolphins,parts))
 
 
 #%%
