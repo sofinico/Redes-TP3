@@ -73,15 +73,13 @@ def histograma(d, c, g='f', plot=True, info=False,
     
     if plot:
         plt.axvline(real, color=color, linestyle='solid',
-                    linewidth=2, label=g+' real')
-        plt.axvline(mean, color=color, linestyle='dotted', 
+                    linewidth=2.5, label=g+' real')
+        plt.axvline(mean, color=color, linestyle=(0, (1, 1)), 
                     linewidth=2, label=g+' prom')
         plt.bar(bincenters, freq_normed, color=color, alpha = 0.5,
                 label=g+' random', width=np.diff(binedges)*0.8)
         plt.title('N = %s' %T, loc = 'right')
-        plt.title('%s - pval: %s' 
-                  %(g,round(pvalue,3)), 
-                  loc = loc_pval)
+        plt.title('%s - pval: %s' %(g,round(pvalue,3)), loc = loc_pval)
         plt.legend(fontsize=6)
     
     if info:
@@ -101,7 +99,7 @@ def major(d, cant=3):
 
 ''' Proporción de generos en las comunidades '''
 
-d = gendercount(dolphins, comunidades, fg, it = 3000)
+d = gendercount(dolphins, comunidades, b, it = 3000)
 
 N = dolphins.number_of_nodes()
 Nf = 0
@@ -119,41 +117,58 @@ for n in dolphins.nodes():
 com_grandes = major(d, cant=3)
     
 for i in com_grandes:
-    plt.figure(i)
+    plt.figure(i)   
     plt.clf()
 
 for i in com_grandes:
     plt.figure(i)
-    histograma(d, c=i, g='m', bins=12, color='dodgerblue')
-    histograma(d, c=i, g='f', bins=12, color='r', loc_pval='center')
-    plt.axvline(Nf/N, color='r', linestyle='solid',
+    plt.axvline(Nf/N, color='lightgrey', linestyle='solid',
                 linewidth=1, label='f total')
-    plt.axvline(Nm/N, color='dodgerblue', linestyle='solid',
+    plt.axvline(Nm/N, color='lightgrey', linestyle='solid',
                 linewidth=1, label='m total')
+    histograma(d, c=i, g='m', bins=10, color='dodgerblue')
+    histograma(d, c=i, g='f', bins=10, color='r', loc_pval='center')
     plt.legend(fontsize=6)
     plt.show()
 
-#%% ESTO ES LOS QUE ESTOY HACIENDO RIGHT NOW
+#%% 
 
-''' Cuantificación de la correlación género-comunidad '''
+''' Cuantificación de la correlación género-comunidad 
+    info: real, mean, stdev, pvalue (fracciones)
+'''
 
-com_grandes = major(d, cant=3)
-prom_sobre = 0; prom_sub = 0;
-pval_sobre = 0; pval_sub = 0;
+# comunidades que voy a considerar para los cálculos
+cant = 3
+com_grandes = major(d, cant)
+
+# listas con fracciones de genero sobre y sub respresentado de cada comunidad
+sobre = []; sub = []; 
+# el género al que corresponden esas fracciones
+g_sobre = []; g_sub = []; 
+# el pval de las fracciones sub y sobre representadas de cada comunidad
+pval_sobre = []; pval_sub = [];
+# el promedio de las tiradas random para cada comunidad y genero
+mean_m = [[],[]]; mean_f = [[],[]];
 
 for com in com_grandes:
+    
     info_m = histograma(d, c=com, g='m', plot=False, info=True)
     info_f = histograma(d, c=com, g='f', plot=False, info=True)
+    mean_m[0].append(info_m[1]); mean_m[1].append(info_m[2]); 
+    mean_f[0].append(info_f[1]); mean_f[1].append(info_f[2]); 
     
     if info_m[1] < info_m[0]:
-        prom_sobre += info_m[0]
-    elif 
-        prom_sub += info_m
-        
-        
-
-
-
+        sobre.append(info_m[0]); g_sobre.append('m');
+        sub.append(info_f[0]); g_sub.append('f');
+        pval_sobre.append(info_m[3]); pval_sub.append(info_f[3]);
+              
+    elif info_f[1] < info_f[0]: 
+        sub.append(info_m[0]); g_sub.append('m');
+        sobre.append(info_f[0]); g_sobre.append('f');
+        pval_sub.append(info_m[3]); pval_sobre.append(info_f[3]);
+    
+    else: 
+        print('algún problemilla')
 
 
 
