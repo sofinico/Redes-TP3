@@ -5,7 +5,7 @@ import matplotlib.pylab as plt
 from func import *
 import numpy as np
 from networkx.algorithms.community import modularity
-
+import itertools
 
 #%% LOAD DATA
 
@@ -56,6 +56,14 @@ randMod = lines[0][1:]
 randSil = lines[1][1:]
 
 
+#%% #### Correr y plotear esto solo si hay valores muy cercanos a +-1.0
+filteredSil = []
+for i in range(len(randSil)):
+    if randSil[i] <= 0.9 and randSil[i] >= -0.9:
+        filteredSil.append(randSil[i])
+
+
+
 #%% Calculamos particiones mediante diferentes metodos
 
 com = community(dolphins,l)
@@ -63,13 +71,18 @@ comunidades[l]=com
 
 parts = partit(dolphins,comunidades[l])
 measured_mod = modularity(dolphins, parts)
+measured_sil = np.average(list(itertools.chain(*silhouette_graph(dolphins,parts))))
+
+
+
 
 #%%
-plt.figure(2)
-plotH(data= randMod,c=label, bins=12, color='dodgerblue', )
-plt.axvline(measured_mod, color='blue', linestyle='solid',
+
+plotH(data= filteredSil,c=l, bins=12, color='dodgerblue', )
+plt.axvline(measured_sil, color='blue', linestyle='solid',
             linewidth=1, label='Observado')
-plt.show(2)
+plt.legend()
+
 
 
 
