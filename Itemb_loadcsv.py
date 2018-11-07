@@ -1,9 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import networkx as nx
+import matplotlib.pylab as plt
+from func import *
+import numpy as np
+from networkx.algorithms.community import modularity
 
-label = 'LITr'
 
-entrada = open('ItemB'+label+'.csv')
+#%% LOAD DATA
+
+dolphins = nx.read_gml('TC03_data/dolphins.gml')
+gender = ldata('TC03_data/dolphinsGender.txt')
+
+
+for n in dolphins.nodes:
+    for g in gender:
+        if g[0] == n:
+            dolphins.nodes[n]['gender'] = g[1]
+
+#%%
+    
+comunidades = dict()
+l = 'louvain'
+
+#%%
+def plotH(data,c, bins=12, color='lightgrey'):
+    freq, binedges = np.histogram(data, bins=bins)
+    norm = sum(freq)
+    freq_normed = [i/norm for i in freq]
+    bincenters = 0.5*(binedges[1:]+binedges[:-1])
+    
+    mean = np.mean(data)
+    stdev = np.std(data)
+
+    plt.axvline(mean, color=color, linestyle='dotted', 
+                linewidth=2)
+    plt.bar(bincenters, freq_normed, color=color, alpha = 0.5, width=np.diff(binedges)*0.8)
+    plt.title('%s' %c, loc = 'right')
+    plt.legend(fontsize=6)
+#%%
+
+
+entrada = open('ItemB'+l+'.csv')
 
 lines = []
 
@@ -13,13 +51,47 @@ for line in entrada:
 for line in lines:
     for i in range(1,len(line)):
         line[i] = float(line[i])
-i = 0
-x = dict()
-while i < len(lines):
-    x[lines[i][0]] = lines[i][1:]
-    i += 1
+
+randMod = lines[0][1:]
+randSil = lines[1][1:]
+
+
+#%% Calculamos particiones mediante diferentes metodos
+
+com = community(dolphins,l)
+comunidades[l]=com
+
+parts = partit(dolphins,comunidades[l])
+measured_mod = modularity(dolphins, parts)
 
 #%%
+plt.figure(2)
+plotH(data= randMod,c=label, bins=12, color='dodgerblue', )
+plt.axvline(measured_mod, color='blue', linestyle='solid',
+            linewidth=1, label='Observado')
+plt.show(2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

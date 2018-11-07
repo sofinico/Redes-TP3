@@ -100,7 +100,7 @@ def grupo(graph,attribute='gender', kind='f'):
     return group
 
 
-def partitions(graph, comunidades):
+def partit(graph, comunidades):
     part = [ [] for i in range(int(max(comunidades))+1) ]
     for a in list(zip(graph.nodes,comunidades)):
         i = int(a[1])
@@ -118,7 +118,7 @@ def silhouette(graph, partitions, node):
     Node: Name of node.
     '''
 
-    bs = []
+    bs = [0.0]
     for p in partitions:
         if node in p:
             amigues = p
@@ -149,8 +149,7 @@ def silhouette(graph, partitions, node):
                         bs.append(bis)
     bi = min(bs)
     M = max([ai,bi])
-    sil = (bi-ai)/M
-    return sil
+    return ai,bi
 
 
 def silhouette_graph(graph, particiones):

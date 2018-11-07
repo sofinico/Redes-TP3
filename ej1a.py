@@ -4,7 +4,8 @@ import networkx as nx
 import matplotlib.pylab as plt
 from func import *
 import numpy as np
-
+from memory_profiler import memory_usage
+import datetime
 #%% LOAD DATA
 
 dolphins = nx.read_gml('TC03_data/dolphins.gml')
@@ -24,6 +25,23 @@ labels = ['louvain','fast_greedy','edge_betweenness','infomap']
 for label in labels:
     com = community(dolphins,label)
     comunidades[label]=com
+
+
+#%%
+
+def f():
+    return community(dolphins,label)
+
+
+#%% Calculamos particiones mediante diferentes metodos
+
+for label in labels:
+    t0 = datetime.datetime.now()
+    community(dolphins,label)
+    print(datetime.datetime.now()-t0)
+    mem = max(memory_usage(proc=f))
+    print("Maximum memory used: {0} MiB".format(str(mem)))
+
 
 #%% Caracterizo cada partición
 
