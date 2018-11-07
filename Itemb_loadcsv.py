@@ -80,7 +80,7 @@ measured_sil = np.average(list(itertools.chain(*silhouette_graph(dolphins,parts)
 #%%
 
 
-plt.figure(105)
+plt.figure(107)
 plotH(data=filteredSil,c=l, bins=12, color='dodgerblue', )
 plt.axvline(measured_sil, color='dodgerblue', linestyle='solid',
             linewidth=2, label='Observado')
