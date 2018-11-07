@@ -94,7 +94,7 @@ Ploteo
 
 #labels = ['louvain','fast_greedy','edge_betweenness','infomap']
     
-l = 'louvain'
+l = 'edge_betweenness'
 
 plt.figure(1)     
 plt.hist(randMod[l], color='dodgerblue', normed=True, histtype='step')
