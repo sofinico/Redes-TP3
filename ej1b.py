@@ -36,12 +36,12 @@ randSil = dict()
 
 #%%
 from networkx.algorithms.community import modularity
+import itertools
 l = 'edge_betweenness'
    
 parts = partit(dolphins,comunidades[l])
 measured_mod = modularity(dolphins, parts)
-measured_sil = np.average(silhouette_graph(dolphins,parts))
-
+measured_sil = np.average(list(itertools.chain(*silhouette_graph(dolphins,parts))))
 
 #%%
 
@@ -58,7 +58,7 @@ times = 1000
 
 #labels = ['louvain','fast_greedy','edge_betweenness','infomap']
 
-l = 'infomap'
+l = 'edge_betweenness'
 
     
 parts = partit(dolphins,comunidades[l])
@@ -69,13 +69,13 @@ random_mode = []
 for t in range(times):
     newG = dolphins.copy()
     newG = nx.double_edge_swap(dolphins, nswap=int(dolphins.number_of_nodes()/2), max_tries=500)
-    mincomp=min(nx.connected_component_subgraphs(newG),key=len)
-    if mincomp.number_of_nodes() > 2:
-        com = community(newG,l)
-        newP = partit(dolphins,com)
-        random_mode.append(modularity(newG, newP))
-        random_sil.append(np.average(list(itertools.chain(*silhouette_graph(newG,newP)))))
+    com = community(newG,l)
+    newP = partit(dolphins,com)
+    lens = [len(i) for i in newP]   
+    random_mode.append(modularity(newG, newP))
+    random_sil.append(np.average(list(itertools.chain(*silhouette_graph(newG,newP)))))
 
+        
 
 randMod[l] = random_mode
 randSil[l] = random_sil

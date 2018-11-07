@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-Label = 'infomap'
+Label = 'edge_betweenness'
 carac = ['Modularity','Silhouette']
 
 dicts = dict()
@@ -20,7 +20,7 @@ for c in carac:
         lines_out1[c].append('%.6f'%dicts[c][Label][i])      
     lines_out1[c] = ','.join(lines_out1[c])
 
-f = open('ItemB'+Label+'.csv','w')
+f = open('ItemB'+Label+'(2)'+'.csv','w')
     
 for c in carac:
     print(c+','+'%s' % lines_out1[c], file=f)

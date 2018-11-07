@@ -21,7 +21,7 @@ for n in dolphins.nodes:
 #%%
     
 comunidades = dict()
-l = 'edge_betweenness'
+l = 'infomap'
 
 #%%
 def plotH(data,c, bins=12, color='lightgrey'):
@@ -36,12 +36,12 @@ def plotH(data,c, bins=12, color='lightgrey'):
     plt.axvline(mean, color=color, linestyle='dotted', 
                 linewidth=2)
     plt.bar(bincenters, freq_normed, color=color, alpha = 0.5, width=np.diff(binedges)*0.8)
-    plt.title('%s' %c, loc = 'right')
-    plt.legend(fontsize=6)
+    plt.title('%s' %c, loc = 'right', weight = 'bold')
+   
 #%%
 
 
-entrada = open('ItemB'+l+'.csv')
+entrada = open('ItemB'+l+'(2)'+'.csv')
 
 lines = []
 
@@ -82,7 +82,7 @@ measured_sil = np.average(list(itertools.chain(*silhouette_graph(dolphins,parts)
 plt.figure(102)
 plotH(data=filteredSil,c=l, bins=12, color='dodgerblue', )
 plt.axvline(measured_sil, color='blue', linestyle='solid',
-            linewidth=1, label='Observado')
+            linewidth=1)
 plt.ylabel('Frecuencia',fontsize=12)
 plt.xlabel('Silouhette',fontsize=12)
 plt.show()

@@ -127,6 +127,7 @@ def silhouette(graph, partitions, node):
             for a in amigues:
                 acum += nx.shortest_path_length(graph, source=node, target=a, weight=None)   
             ai = acum/len(amigues)
+        
             
         if node not in p:
             if len(list(nx.connected_component_subgraphs(graph))) == 1: 
@@ -146,10 +147,15 @@ def silhouette(graph, partitions, node):
                                 bcum += nx.shortest_path_length(g, source=node, target=b, weight=None) 
                         bis = bcum/len(enemigues)
                         bs.append(bis)
+    if len(bs)==0:
+        bs.append(0.0)
     bi = min(bs)
     M = max([ai,bi])
-    sil = (bi-ai)/M
-    return sil
+    if M == 0.0:
+        return 0.0
+    else:
+        sil = (bi-ai)/M
+        return sil
 
 
 def silhouette_graph(graph, particiones):
